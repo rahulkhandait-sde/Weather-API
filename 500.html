@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>500 - Server Error | Weather App</title>
+		<meta
+			name="description"
+			content="Internal server error. Please try again later or return to the Weather App homepage." />
+		<meta name="robots" content="noindex, nofollow" />
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="./icons/icon-32x32.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet" />
+		<link rel="stylesheet" href="./styles.css" />
+
+		<style>
+			body {
+				overflow: hidden;
+				position: relative;
+			}
+
+			/* Lightning animation */
+			.lightning {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+				z-index: 1;
+			}
+
+			.lightning::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(255, 255, 255, 0);
+				animation: lightning 4s infinite ease-in-out;
+			}
+
+			@keyframes lightning {
+				0%,
+				90%,
+				100% {
+					background: rgba(255, 255, 255, 0);
+				}
+				92%,
+				94% {
+					background: rgba(255, 255, 255, 0.3);
+				}
+			}
+
+			.error-container {
+				position: relative;
+				z-index: 10;
+				animation: shake 0.5s ease-in-out infinite alternate;
+			}
+
+			@keyframes shake {
+				0% {
+					transform: translateX(0);
+				}
+				100% {
+					transform: translateX(2px);
+				}
+			}
+
+			.error-number {
+				color: #e74c3c !important;
+				text-shadow: 0 0 20px rgba(231, 76, 60, 0.5) !important;
+			}
+
+			.weather-icon {
+				font-size: 5rem;
+				margin-bottom: 20px;
+				animation: storm 1s infinite ease-in-out alternate;
+			}
+
+			@keyframes storm {
+				0% {
+					transform: rotate(-2deg) scale(1);
+				}
+				100% {
+					transform: rotate(2deg) scale(1.05);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Lightning effect -->
+		<div class="lightning"></div>
+
+		<div class="container">
+			<div class="error-container">
+				<div class="weather-icon">⛈️</div>
+				<div class="error-number">500</div>
+				<h1 class="error-title">Severe Weather Alert!</h1>
+				<p class="error-message">
+					Our servers are experiencing a severe digital storm. The weather
+					systems are temporarily offline while we work to restore service.
+				</p>
+
+				<div class="error-suggestions">
+					<h3>While we fix the storm:</h3>
+					<ul class="suggestions-list">
+						<li>Please try again in a few minutes</li>
+						<li>Check if the issue persists</li>
+						<li>Return to the homepage</li>
+						<li>The weather will clear up soon!</li>
+					</ul>
+				</div>
+
+				<div class="action-buttons">
+					<a href="./index.html" class="btn btn-primary"> 🏠 Weather Home </a>
+					<a href="javascript:history.back()" class="btn"> ⬅️ Go Back </a>
+					<a href="javascript:location.reload()" class="btn"> 🔄 Try Again </a>
+				</div>
+
+				<div class="footer-info">
+					<p>
+						Don't worry! Even the best weather stations experience storms. We'll
+						be back online shortly!
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Auto-refresh every 30 seconds
+			setTimeout(() => {
+				location.reload();
+			}, 30000);
+
+			// Add some interactive functionality
+			document.addEventListener("DOMContentLoaded", function () {
+				const weatherIcon = document.querySelector(".weather-icon");
+				const stormIcons = ["⛈️", "🌩️", "⚡", "☔"];
+				let iconIndex = 0;
+
+				// Change storm icon every 2 seconds
+				setInterval(() => {
+					iconIndex = (iconIndex + 1) % stormIcons.length;
+					weatherIcon.textContent = stormIcons[iconIndex];
+				}, 2000);
+
+				// Keyboard navigation
+				document.addEventListener("keydown", function (e) {
+					if (e.key === "Enter" || e.key === " ") {
+						if (e.target.classList.contains("btn")) {
+							e.target.click();
+						}
+					}
+					// Press 'R' to reload
+					if (e.key.toLowerCase() === "r") {
+						location.reload();
+					}
+					// Press 'H' to go home
+					if (e.key.toLowerCase() === "h") {
+						window.location.href = "./index.html";
+					}
+				});
+			});
+		</script>
+
+		<footer class="footer">
+			<p>
+				&copy; 2025 Made with ❤️ by Rahul Khandait | Powered by
+				<a
+					href="https://www.weatherapi.com/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="weather-api-link"
+					>WeatherAPI</a
+				>
+			</p>
+		</footer>
+	</body>
+</html>

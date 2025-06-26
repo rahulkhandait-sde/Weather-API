@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- Critical resource hints -->
+		<link rel="preload" href="./styles.css" as="style" />
+		<link rel="preload" href="./script.js" as="script" />
+		<link rel="dns-prefetch" href="//api.weatherapi.com" />
+		<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+		<link rel="preconnect" href="https://api.weatherapi.com" />
+
+		<!-- SEO and meta tags -->
+		<meta
+			name="description"
+			content="Get accurate real-time weather information, 3-day forecasts, and air quality data for any location worldwide. Fast, modern weather app with PWA support." />
+		<meta
+			name="keywords"
+			content="weather, forecast, temperature, air quality, PWA, real-time weather" />
+		<meta name="author" content="Rahul Khandait" />
+		<meta name="robots" content="index, follow" />
+		<meta name="theme-color" content="#667eea" />
+
+		<!-- Open Graph -->
+		<meta
+			property="og:title"
+			content="Weather App - Real-time Weather & Forecast" />
+		<meta
+			property="og:description"
+			content="Get accurate weather information and forecasts for any location worldwide." />
+		<meta property="og:type" content="website" />
+		<meta property="og:image" content="./icons/icon-512x512.png" />
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content="Weather App - Real-time Weather" />
+		<meta
+			name="twitter:description"
+			content="Get accurate weather information for any location worldwide." />
+
+		<!-- PWA -->
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-title" content="Weather App" />
+		<link rel="manifest" href="./manifest.json" />
+		<link rel="apple-touch-icon" href="./icons/icon-192x192.png" />
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="./icons/icon-32x32.png" />
+
+		<title>Weather App - Real-time Weather Information</title>
+
+		<!-- Critical CSS inlined -->
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			body {
+				font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+					Roboto, sans-serif;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				min-height: 100vh;
+				color: #333;
+				line-height: 1.6;
+				font-display: swap;
+			}
+			.container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 20px;
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+			}
+			.header {
+				text-align: center;
+				margin-bottom: 40px;
+				color: white;
+			}
+			.header h1 {
+				font-size: 2.5rem;
+				font-weight: 700;
+				margin-bottom: 10px;
+				text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+			}
+			.search-section {
+				margin-bottom: 40px;
+				position: relative;
+			}
+			.search-container {
+				display: flex;
+				gap: 10px;
+				max-width: 500px;
+				margin: 0 auto;
+				background: white;
+				padding: 8px;
+				border-radius: 50px;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+			}
+			#locationInput {
+				flex: 1;
+				border: none;
+				outline: none;
+				padding: 15px 20px;
+				font-size: 1rem;
+				border-radius: 50px;
+				background: transparent;
+			}
+			#searchBtn,
+			#currentLocationBtn {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				border: none;
+				color: white;
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.1rem;
+			}
+			.loading {
+				background: rgba(255, 255, 255, 0.95);
+				border-radius: 25px;
+				padding: 40px;
+				text-align: center;
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+			}
+			.sr-only {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				padding: 0;
+				margin: -1px;
+				overflow: hidden;
+				clip: rect(0, 0, 0, 0);
+				white-space: nowrap;
+				border: 0;
+			}
+			.main-content {
+				flex: 1;
+			}
+		</style>
+
+		<!-- Non-critical CSS loaded asynchronously -->
+		<link
+			rel="preload"
+			href="./styles.css"
+			as="style"
+			onload="this.onload=null;this.rel='stylesheet'" />
+		<noscript><link rel="stylesheet" href="./styles.css" /></noscript>
+
+		<!-- Structured Data -->
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "WebApplication",
+				"name": "Weather App",
+				"description": "Real-time weather information and forecasts",
+				"author": { "@type": "Person", "name": "Rahul Khandait" },
+				"applicationCategory": "Weather",
+				"operatingSystem": "All"
+			}
+		</script>
+	</head>
+	<body>
+		<a href="#main-content" class="sr-only">Skip to main content</a>
+
+		<div class="container">
+			<header class="header" role="banner">
+				<h1>🌤️ Weather App</h1>
+				<p>Get real-time weather information for any location</p>
+			</header>
+
+			<main class="main-content" id="main-content" role="main">
+				<section class="search-section" aria-label="Weather search">
+					<div class="search-container">
+						<label for="locationInput" class="sr-only">Enter city name</label>
+						<input
+							type="text"
+							id="locationInput"
+							placeholder="Enter city name..."
+							autocomplete="off"
+							aria-label="City name" />
+						<button id="searchBtn" aria-label="Search weather" type="button">
+							🔍
+						</button>
+						<button
+							id="currentLocationBtn"
+							aria-label="Get current location weather"
+							type="button">
+							📍
+						</button>
+					</div>
+					<div class="suggestions" id="suggestions" style="display: none"></div>
+				</section>
+
+				<section
+					class="weather-info"
+					id="weatherInfo"
+					style="display: none"
+					aria-live="polite">
+					<div class="current-weather">
+						<div class="weather-main">
+							<div class="location-info">
+								<h2 id="locationName"></h2>
+								<p id="lastUpdated"></p>
+							</div>
+							<div class="temperature-display">
+								<div class="temp-main">
+									<span
+										id="temperature"
+										aria-label="Current temperature"></span>
+									<div class="temp-unit">
+										<button
+											id="celsiusBtn"
+											class="unit-btn active"
+											aria-label="Celsius">
+											°C
+										</button>
+										<button
+											id="fahrenheitBtn"
+											class="unit-btn"
+											aria-label="Fahrenheit">
+											°F
+										</button>
+									</div>
+								</div>
+								<div class="weather-icon">
+									<img
+										id="weatherIcon"
+										alt="Weather condition"
+										width="80"
+										height="80"
+										loading="lazy" />
+								</div>
+							</div>
+						</div>
+
+						<div class="weather-description">
+							<h3 id="conditionText"></h3>
+							<p>Feels like <span id="feelsLike"></span></p>
+						</div>
+					</div>
+
+					<div class="weather-details">
+						<h3>Weather Details</h3>
+						<div class="details-grid">
+							<div class="detail-card">
+								<span>👁️</span>
+								<div class="detail-content">
+									<span class="detail-label">Visibility</span>
+									<span class="detail-value" id="visibility"></span>
+								</div>
+							</div>
+							<div class="detail-card">
+								<span>💧</span>
+								<div class="detail-content">
+									<span class="detail-label">Humidity</span>
+									<span class="detail-value" id="humidity"></span>
+								</div>
+							</div>
+							<div class="detail-card">
+								<span>💨</span>
+								<div class="detail-content">
+									<span class="detail-label">Wind Speed</span>
+									<span class="detail-value" id="windSpeed"></span>
+								</div>
+							</div>
+							<div class="detail-card">
+								<span>🧭</span>
+								<div class="detail-content">
+									<span class="detail-label">Wind Direction</span>
+									<span class="detail-value" id="windDirection"></span>
+								</div>
+							</div>
+							<div class="detail-card">
+								<span>🌡️</span>
+								<div class="detail-content">
+									<span class="detail-label">Pressure</span>
+									<span class="detail-value" id="pressure"></span>
+								</div>
+							</div>
+							<div class="detail-card">
+								<span>☀️</span>
+								<div class="detail-content">
+									<span class="detail-label">UV Index</span>
+									<span class="detail-value" id="uvIndex"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="air-quality" id="airQuality">
+						<h3>Air Quality Index</h3>
+						<div class="aqi-container">
+							<div class="aqi-main">
+								<div class="aqi-value" id="aqiValue"></div>
+								<div class="aqi-status" id="aqiStatus"></div>
+							</div>
+							<div class="aqi-details">
+								<div class="aqi-item">
+									<span>CO:</span><span id="co"></span>
+								</div>
+								<div class="aqi-item">
+									<span>NO₂:</span><span id="no2"></span>
+								</div>
+								<div class="aqi-item">
+									<span>O₃:</span><span id="o3"></span>
+								</div>
+								<div class="aqi-item">
+									<span>SO₂:</span><span id="so2"></span>
+								</div>
+								<div class="aqi-item">
+									<span>PM2.5:</span><span id="pm25"></span>
+								</div>
+								<div class="aqi-item">
+									<span>PM10:</span><span id="pm10"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="weather-forecast" id="weatherForecast">
+						<h3>3-Day Forecast</h3>
+						<div class="forecast-container">
+							<div class="forecast-day" id="forecast-day-0">
+								<div class="forecast-date"></div>
+								<div class="forecast-icon">
+									<img
+										src=""
+										alt="Weather condition"
+										width="50"
+										height="50"
+										loading="lazy" />
+								</div>
+								<div class="forecast-condition"></div>
+								<div class="forecast-temps">
+									<span class="forecast-high"></span>
+									<span class="forecast-low"></span>
+								</div>
+								<div class="forecast-details">
+									<div class="forecast-detail">
+										<span>💧</span><span class="forecast-rain"></span>
+									</div>
+									<div class="forecast-detail">
+										<span>💨</span><span class="forecast-wind"></span>
+									</div>
+								</div>
+							</div>
+							<div class="forecast-day" id="forecast-day-1">
+								<div class="forecast-date"></div>
+								<div class="forecast-icon">
+									<img
+										src=""
+										alt="Weather condition"
+										width="50"
+										height="50"
+										loading="lazy" />
+								</div>
+								<div class="forecast-condition"></div>
+								<div class="forecast-temps">
+									<span class="forecast-high"></span>
+									<span class="forecast-low"></span>
+								</div>
+								<div class="forecast-details">
+									<div class="forecast-detail">
+										<span>💧</span><span class="forecast-rain"></span>
+									</div>
+									<div class="forecast-detail">
+										<span>💨</span><span class="forecast-wind"></span>
+									</div>
+								</div>
+							</div>
+							<div class="forecast-day" id="forecast-day-2">
+								<div class="forecast-date"></div>
+								<div class="forecast-icon">
+									<img
+										src=""
+										alt="Weather condition"
+										width="50"
+										height="50"
+										loading="lazy" />
+								</div>
+								<div class="forecast-condition"></div>
+								<div class="forecast-temps">
+									<span class="forecast-high"></span>
+									<span class="forecast-low"></span>
+								</div>
+								<div class="forecast-details">
+									<div class="forecast-detail">
+										<span>💧</span><span class="forecast-rain"></span>
+									</div>
+									<div class="forecast-detail">
+										<span>💨</span><span class="forecast-wind"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section
+					class="error-message"
+					id="errorMessage"
+					style="display: none"
+					role="alert">
+					<div class="error-content">
+						<span style="font-size: 3rem">⚠️</span>
+						<h3>Oops! Something went wrong</h3>
+						<p id="errorText"></p>
+						<button id="retryBtn" type="button">Try Again</button>
+					</div>
+				</section>
+
+				<section class="loading" id="loading" style="display: none">
+					<div class="loading-spinner">
+						<span style="font-size: 3rem">🔄</span>
+						<p>Getting weather information...</p>
+					</div>
+				</section>
+			</main>
+
+			<footer class="footer">
+				<p>
+					&copy; 2025 Made with ❤️ by Rahul Khandait | Powered by
+					<a
+						href="https://www.weatherapi.com/"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="weather-api-link"
+						>WeatherAPI</a
+					>
+				</p>
+			</footer>
+		</div>
+
+		<!-- Optimized JavaScript with service worker inline -->
+		<script>
+			if ("serviceWorker" in navigator) {
+				window.addEventListener("load", () => {
+					navigator.serviceWorker
+						.register("./sw.js")
+						.then((r) => console.log("SW registered"))
+						.catch((e) => console.log("SW failed"));
+				});
+			}
+		</script>
+		<script src="./script.js" defer></script>
+	</body>
+</html>

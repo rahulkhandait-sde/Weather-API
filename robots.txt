@@ -1,0 +1,34 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://yourweatherapp.com/sitemap.xml
+
+# Crawl-delay for better server performance
+Crawl-delay: 1
+
+# Block specific user agents if needed
+# User-agent: BadBot
+# Disallow: /
+
+# Sitemap
+Sitemap: /sitemap.xml
+
+# Block access to admin or private areas (if any)
+Disallow: /admin/
+Disallow: /private/
+
+# Allow access to CSS and JS files
+Allow: /*.css$
+Allow: /*.js$
+
+# Allow access to images
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.webp$
+Allow: /*.svg$
+
+# Crawl-delay (optional, helps with server load)
+Crawl-delay: 1

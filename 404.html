@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>404 - Page Not Found | Weather App</title>
+		<meta
+			name="description"
+			content="The page you're looking for doesn't exist. Return to the Weather App homepage to get weather information." />
+		<meta name="robots" content="noindex, nofollow" />
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="./icons/icon-32x32.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet" />
+		<link rel="stylesheet" href="./styles.css" />
+
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+					Roboto, sans-serif;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin: 0;
+				color: white;
+				overflow: hidden;
+				position: relative;
+			}
+
+			/* Animated background clouds */
+			.cloud {
+				position: absolute;
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 50px;
+				opacity: 0.3;
+				animation: float 20s infinite ease-in-out;
+			}
+
+			.cloud:before {
+				content: "";
+				position: absolute;
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 50px;
+			}
+
+			.cloud:after {
+				content: "";
+				position: absolute;
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 50px;
+			}
+
+			.cloud1 {
+				width: 80px;
+				height: 40px;
+				top: 20%;
+				left: 10%;
+				animation-delay: 0s;
+			}
+
+			.cloud1:before {
+				width: 50px;
+				height: 50px;
+				top: -25px;
+				left: 10px;
+			}
+
+			.cloud1:after {
+				width: 60px;
+				height: 40px;
+				top: -15px;
+				right: 10px;
+			}
+
+			.cloud2 {
+				width: 100px;
+				height: 50px;
+				top: 60%;
+				right: 10%;
+				animation-delay: -10s;
+			}
+
+			.cloud2:before {
+				width: 60px;
+				height: 60px;
+				top: -30px;
+				left: 15px;
+			}
+
+			.cloud2:after {
+				width: 70px;
+				height: 50px;
+				top: -20px;
+				right: 15px;
+			}
+
+			.cloud3 {
+				width: 60px;
+				height: 30px;
+				top: 40%;
+				right: 20%;
+				animation-delay: -5s;
+			}
+
+			.cloud3:before {
+				width: 40px;
+				height: 40px;
+				top: -20px;
+				left: 8px;
+			}
+
+			.cloud3:after {
+				width: 50px;
+				height: 30px;
+				top: -10px;
+				right: 8px;
+			}
+
+			@keyframes float {
+				0%,
+				100% {
+					transform: translateX(0) translateY(0);
+				}
+				25% {
+					transform: translateX(10px) translateY(-10px);
+				}
+				50% {
+					transform: translateX(-5px) translateY(5px);
+				}
+				75% {
+					transform: translateX(5px) translateY(-5px);
+				}
+			}
+
+			/* Main content */
+			.error-container {
+				background: rgba(255, 255, 255, 0.1);
+				padding: 50px 40px;
+				border-radius: 25px;
+				backdrop-filter: blur(15px);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				max-width: 600px;
+				width: 90%;
+				text-align: center;
+				box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+				position: relative;
+				z-index: 10;
+				animation: slideIn 0.8s ease-out;
+			}
+
+			@keyframes slideIn {
+				from {
+					opacity: 0;
+					transform: translateY(30px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			.weather-icon {
+				font-size: 5rem;
+				margin-bottom: 20px;
+				animation: bounce 2s infinite ease-in-out;
+			}
+
+			@keyframes bounce {
+				0%,
+				20%,
+				50%,
+				80%,
+				100% {
+					transform: translateY(0);
+				}
+				40% {
+					transform: translateY(-10px);
+				}
+				60% {
+					transform: translateY(-5px);
+				}
+			}
+
+			.error-number {
+				font-size: 4rem;
+				font-weight: 700;
+				margin-bottom: 10px;
+				background: linear-gradient(45deg, #ffd700, #ffed4e);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+				text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+			}
+
+			.error-title {
+				font-size: 2rem;
+				font-weight: 600;
+				margin-bottom: 15px;
+				color: #fff;
+			}
+
+			.error-message {
+				font-size: 1.2rem;
+				margin-bottom: 30px;
+				opacity: 0.9;
+				line-height: 1.6;
+				color: rgba(255, 255, 255, 0.9);
+			}
+
+			.error-suggestions {
+				margin-bottom: 40px;
+			}
+
+			.error-suggestions h3 {
+				font-size: 1.1rem;
+				margin-bottom: 15px;
+				color: #ffd700;
+				font-weight: 500;
+			}
+
+			.suggestions-list {
+				list-style: none;
+				text-align: left;
+				max-width: 400px;
+				margin: 0 auto;
+			}
+
+			.suggestions-list li {
+				padding: 8px 0;
+				font-size: 1rem;
+				opacity: 0.8;
+				display: flex;
+				align-items: center;
+			}
+
+			.suggestions-list li:before {
+				content: "⚡";
+				margin-right: 10px;
+				font-size: 1.2rem;
+			}
+
+			.action-buttons {
+				display: flex;
+				gap: 15px;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+
+			.btn {
+				background: rgba(255, 255, 255, 0.2);
+				color: white;
+				text-decoration: none;
+				padding: 15px 30px;
+				border-radius: 25px;
+				font-weight: 500;
+				font-size: 1rem;
+				transition: all 0.3s ease;
+				border: 1px solid rgba(255, 255, 255, 0.3);
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				min-width: 140px;
+				justify-content: center;
+			}
+
+			.btn:hover {
+				background: rgba(255, 255, 255, 0.3);
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+			}
+
+			.btn-primary {
+				background: linear-gradient(135deg, #ffd700, #ffed4e);
+				color: #333;
+				font-weight: 600;
+			}
+
+			.btn-primary:hover {
+				background: linear-gradient(135deg, #ffed4e, #ffd700);
+				color: #333;
+			}
+
+			.footer-info {
+				margin-top: 30px;
+				padding-top: 20px;
+				border-top: 1px solid rgba(255, 255, 255, 0.2);
+				font-size: 0.9rem;
+				opacity: 0.7;
+			}
+
+			/* Responsive design */
+			@media (max-width: 768px) {
+				.error-container {
+					padding: 40px 30px;
+					margin: 20px;
+				}
+
+				.error-number {
+					font-size: 3rem;
+				}
+
+				.error-title {
+					font-size: 1.5rem;
+				}
+
+				.error-message {
+					font-size: 1.1rem;
+				}
+
+				.action-buttons {
+					flex-direction: column;
+					align-items: center;
+				}
+
+				.btn {
+					min-width: 200px;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.weather-icon {
+					font-size: 4rem;
+				}
+
+				.error-number {
+					font-size: 2.5rem;
+				}
+
+				.error-title {
+					font-size: 1.3rem;
+				}
+
+				.suggestions-list {
+					text-align: center;
+				}
+			}
+
+			/* Accessibility */
+			@media (prefers-reduced-motion: reduce) {
+				* {
+					animation-duration: 0.01ms !important;
+					animation-iteration-count: 1 !important;
+					transition-duration: 0.01ms !important;
+				}
+			}
+
+			/* Focus styles for keyboard navigation */
+			.btn:focus {
+				outline: 3px solid #ffd700;
+				outline-offset: 2px;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Animated background clouds -->
+		<div class="cloud cloud1"></div>
+		<div class="cloud cloud2"></div>
+		<div class="cloud cloud3"></div>
+
+		<div class="error-container">
+			<div class="weather-icon">🌩️</div>
+			<div class="error-number">404</div>
+			<h1 class="error-title">Stormy Weather Ahead!</h1>
+			<p class="error-message">
+				Looks like you've wandered into a weather pattern we don't recognize.
+				The page you're looking for seems to have blown away in the digital
+				wind.
+			</p>
+
+			<div class="error-suggestions">
+				<h3>Here's what you can do:</h3>
+				<ul class="suggestions-list">
+					<li>Check the weather on our homepage</li>
+					<li>Search for your city's forecast</li>
+					<li>Get current location weather</li>
+					<li>Explore air quality information</li>
+				</ul>
+			</div>
+
+			<div class="action-buttons">
+				<a href="./index.html" class="btn btn-primary"> 🏠 Weather Home </a>
+				<a href="javascript:history.back()" class="btn"> ⬅️ Go Back </a>
+				<a href="./index.html" class="btn"> 🔍 Search Weather </a>
+			</div>
+
+			<div class="footer-info">
+				<p>
+					Still having trouble? The weather is always changing, but our app is
+					always here to help!
+				</p>
+			</div>
+		</div>
+
+		<script>
+			// Add some interactive functionality
+			document.addEventListener("DOMContentLoaded", function () {
+				// Auto-redirect after 10 seconds (optional)
+				let countdown = 10;
+				const redirectTimer = setInterval(() => {
+					countdown--;
+					if (countdown <= 0) {
+						clearInterval(redirectTimer);
+						window.location.href = "./index.html";
+					}
+				}, 1000);
+
+				// Add click event to weather icon for fun
+				const weatherIcon = document.querySelector(".weather-icon");
+				weatherIcon.addEventListener("click", function () {
+					const icons = ["🌩️", "⛈️", "🌪️", "☔", "⛅", "🌤️", "☀️"];
+					const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+					this.textContent = randomIcon;
+				});
+
+				// Keyboard navigation
+				document.addEventListener("keydown", function (e) {
+					if (e.key === "Enter" || e.key === " ") {
+						if (e.target.classList.contains("btn")) {
+							e.target.click();
+						}
+					}
+					// Press 'H' to go home quickly
+					if (e.key.toLowerCase() === "h") {
+						window.location.href = "./index.html";
+					}
+				});
+
+				// Add some dynamic weather-themed messages
+				const messages = [
+					"Looks like you've wandered into a weather pattern we don't recognize.",
+					"This page seems to have been swept away by a digital tornado!",
+					"The forecast for this page is: 100% chance of not existing.",
+					"Houston, we have a weather problem... this page is in another storm system!",
+					"Even our weather satellites can't locate this page!",
+				];
+
+				const errorMessage = document.querySelector(".error-message");
+				const randomMessage =
+					messages[Math.floor(Math.random() * messages.length)];
+				errorMessage.textContent = randomMessage;
+			});
+		</script>
+
+		<footer class="footer">
+			<p>
+				&copy; 2025 Made with ❤️ by Rahul Khandait | Powered by
+				<a
+					href="https://www.weatherapi.com/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="weather-api-link"
+					>WeatherAPI</a
+				>
+			</p>
+		</footer>
+	</body>
+</html>
