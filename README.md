@@ -76,13 +76,6 @@ weather-app/
 └── README.md           # This file
 ```
 
-## 🌐 Browser Support
-
-- ✅ Chrome 60+
-- ✅ Firefox 55+
-- ✅ Safari 12+
-- ✅ Edge 79+
-- ✅ Mobile browsers (iOS Safari, Chrome Mobile)
 
 ## 🔒 Privacy & Security
 
@@ -124,47 +117,11 @@ weather-app/
 - ARIA labels and roles
 - Focus management
 
-## 🚀 Deployment
-
-### GitHub Pages
-
-1. Upload files to GitHub repository
-2. Enable GitHub Pages in repository settings
-3. Your app will be available at `https://username.github.io/repository-name`
-
-### Netlify/Vercel
-
-1. Connect your GitHub repository
-2. Deploy automatically on commits
-3. Configure custom domain if needed
-
-### Traditional Web Hosting
-
-1. Upload all files to your web server
-2. Ensure HTTPS is enabled for full PWA functionality
-3. Configure server headers if needed (optional .htaccess file)
-
-## 🔄 Updates
-
-The app automatically checks for updates via the service worker. Users will be notified when a new version is available.
 
 ## 📄 License
 
 MIT License - feel free to use this project for personal or commercial purposes.
 
-## 👨‍💻 Developer
-
-Made with ❤️ by **Rahul Khandait**
-
----
-
-## 📊 Performance Tips
-
-1. Host on a reliable static hosting service (Netlify, Vercel, GitHub Pages)
-2. Enable server compression (gzip/brotli) if available
-3. Use a CDN for better global performance
-4. Ensure HTTPS is enabled for full PWA functionality
-5. The app is already optimized for maximum performance
 
 ## 🔗 WeatherAPI Integration
 
